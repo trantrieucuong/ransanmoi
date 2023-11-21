@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Trò chơi Rắn săn mồi đơn giản</title>
+    <style>
+      #game-board {
+        width: 400px;
+        height: 400px;
+        border: 1px solid black;
+        background-color: #eee;
+      }
+      
+      .snake {
+        width: 10px;
+        height: 10px;
+        background-color: green;
+        position: absolute;
+      }
+      
+      .food {
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game-board"></div>
+    
+    <script>
+        
+      var gameBoard = document.getElementById("game-board");
+      var snake = [{x: 200, y: 200}];
+      var direction = "right";
+      var food = {x: 100, y: 100};
+      
+      function draw() {
+        gameBoard.innerHTML = "";
+        var snakeHead = snake[0];
+        var newHead;
+        
+        switch(direction) {
+          case "right":
+            newHead = {x: snakeHead.x + 10, y: snakeHead.y};
+            break;
+          case "left":
+            newHead = {x: snakeHead.x - 10, y: snakeHead.y};
+            break;
+          case "up":
+            newHead = {x: snakeHead.x, y: snakeHead.y - 10};
+            break;
+          case "down":
+            newHead = {x: snakeHead.x, y: snakeHead.y + 10};
+            break;
+        }
+        
+        snake.unshift(newHead);
+        
+        if (newHead.x === food.x && newHead.y === food.y) {
+          food.x = Math.floor(Math.random() * 40) * 10;
+          food.y = Math.floor(Math.random() * 40) * 10;
+        } else {
+          snake.pop();
+        }
+        
+        for (var i = 0; i < snake.length; i++) {
+          var snakeBody = document.createElement("div");
+          snakeBody.className = "snake";
+          snakeBody.style.left = snake[i].x + "px";
+          snakeBody.style.top = snake[i].y + "px";
+          gameBoard.appendChild(snakeBody);
+        }
+        
+        
+        var foodElement = document.createElement("div");
+        foodElement.className = "food";
+        foodElement.style.left = food.x + "px";
+        foodElement.style.top = food.y + "px";
+        gameBoard.appendChild(foodElement);
+      }
+
+      
+      setInterval(draw, 100);
+      
+      document.addEventListener("keydown", function(event) {
+        switch(event.keyCode) {
+          case 37:
+            direction = "left";
+            break;
+          case 38:
+            direction = "up";
+            break;
+          case 39:
+            direction = "right";
+            break;
+          case 40:
+            direction = "down";
+            break;
+        }
+      });
+    </script>
+  </body>
+</html>
